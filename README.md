@@ -1,5 +1,4 @@
-Django ORM Adapter for PyCasbin 
-====
+# Django ORM Adapter for PyCasbin
 
 [![Build Status](https://www.travis-ci.org/pycasbin/django-orm-adapter.svg?branch=master)](https://www.travis-ci.org/pycasbin/django-orm-adapter)
 [![Coverage Status](https://coveralls.io/repos/github/pycasbin/django-orm-adapter/badge.svg)](https://coveralls.io/github/pycasbin/django-orm-adapter)
@@ -29,13 +28,23 @@ Based on [Officially Supported Databases](https://docs.djangoproject.com/en/3.0/
 pip install casbin_django_orm_adapter
 ```
 
+Add `casbin_adapter` to your `INSTALLED_APPS`
+
+```python
+INSTALLED_APPS = [
+    ...
+    'casbin_adapter',
+    ...
+]
+```
+
 ## Simple Example
 
 ```python
-import casbin_django_orm_adapter
 import casbin
+from casbin_adapter.adapter import Adapter
 
-adapter = casbin_django_orm_adapter.Adapter('sqlite:///test.db')
+adapter = Adapter()
 
 e = casbin.Enforcer('path/to/model.conf', adapter, True)
 
@@ -50,7 +59,6 @@ else:
     # deny the request, show an error
     pass
 ```
-
 
 ### Getting Help
 
