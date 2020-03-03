@@ -38,6 +38,8 @@ INSTALLED_APPS = [
 ]
 ```
 
+To run schema migration, execute `python manage.py migrate casbin_adapter
+
 ## Simple Example
 
 ```python
