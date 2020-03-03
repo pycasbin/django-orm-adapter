@@ -1,9 +1,8 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
-    name='casbin_django_orm_adapter',
-    version='0.1dev',
-    packages=['casbin_django_orm_adapter',],
-    license='Creative Commons Attribution-Noncommercial-Share Alike license',
-    long_description=open('README.md').read(),
+    name='casbin-django-orm-adapter',
+    version="0.0.1",
+    packages=find_packages(),
+    license="Apache-2.0",
 )
