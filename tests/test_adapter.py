@@ -1,40 +1,32 @@
-from casbin_django_orm_adapter import Adapter
-# from casbin_django_orm_adapter import Base
-from casbin_django_orm_adapter import CasbinRule
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from unittest import TestCase
-import casbin
 import os
+import casbin
 import simpleeval
+from unittest import TestCase
+
+from django.test import TestCase
+from casbin_adapter.models import CasbinRule
+from casbin_adapter.adapter import Adapter
 
 
 def get_fixture(path):
     dir_path = os.path.split(os.path.realpath(__file__))[0] + "/"
     return os.path.abspath(dir_path + path)
 
-
 def get_enforcer():
-    engine = create_engine("sqlite://")
-    adapter = Adapter(engine)
+    adapter = Adapter()
 
-    session = sessionmaker(bind=engine)
-    Base.metadata.create_all(engine)
-    s = session()
-
-    s.add(CasbinRule(ptype='p', v0='alice', v1='data1', v2='read'))
-    s.add(CasbinRule(ptype='p', v0='bob', v1='data2', v2='write'))
-    s.add(CasbinRule(ptype='p', v0='data2_admin', v1='data2', v2='read'))
-    s.add(CasbinRule(ptype='p', v0='data2_admin', v1='data2', v2='write'))
-    s.add(CasbinRule(ptype='g', v0='alice', v1='data2_admin'))
-    s.commit()
-    s.close()
+    CasbinRule.objects.bulk_create([
+        CasbinRule(ptype='p', v0='alice', v1='data1', v2='read'),
+        CasbinRule(ptype='p', v0='bob', v1='data2', v2='write'),
+        CasbinRule(ptype='p', v0='data2_admin', v1='data2', v2='read'),
+        CasbinRule(ptype='p', v0='data2_admin', v1='data2', v2='write'),
+        CasbinRule(ptype='g', v0='alice', v1='data2_admin'),
+    ])
 
     return casbin.Enforcer(get_fixture('rbac_model.conf'), adapter, True)
 
 
 class TestConfig(TestCase):
-
     def test_enforcer_basic(self):
         e = get_enforcer()
         self.assertTrue(e.enforce('alice', 'data1', 'read'))
@@ -44,7 +36,7 @@ class TestConfig(TestCase):
         self.assertTrue(e.enforce('alice', 'data2', 'write'))
 
     def test_add_policy(self):
-        adapter = Adapter('sqlite://')
+        adapter = Adapter()
         e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter, True)
 
         try:
@@ -75,7 +67,7 @@ class TestConfig(TestCase):
 
     def test_save_policy(self):
         model = casbin.Enforcer(get_fixture('rbac_model.conf'), get_fixture('rbac_policy.csv')).model
-        adapter = Adapter('sqlite://')
+        adapter = Adapter()
         adapter.save_policy(model)
         e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
 
@@ -85,6 +77,46 @@ class TestConfig(TestCase):
         self.assertTrue(e.enforce('alice', 'data2', 'read'))
         self.assertTrue(e.enforce('alice', 'data2', 'write'))
 
+    def test_autosave_off_doesnt_persist_to_db(self):
+        adapter = Adapter()
+        e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
+
+        e.enable_auto_save(False)
+        e.add_policy('alice', 'data1', 'write')
+        e.load_policy()
+        policies = e.get_policy()
+        self.assertListEqual(policies, [])
+
+    def test_autosave_on_persists_to_db(self):
+        adapter = Adapter()
+        e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
+
+        e.enable_auto_save(True)
+        e.add_policy('alice', 'data1', 'write')
+        e.load_policy()
+        policies = e.get_policy()
+        self.assertListEqual(policies, [['alice', 'data1', 'write']])
+
+    def test_autosave_on_persists_remove_action_to_db(self):
+        adapter = Adapter()
+        e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
+        e.add_policy('alice', 'data1', 'write')
+        e.load_policy()
+        self.assertListEqual(e.get_policy(), [['alice', 'data1', 'write']])
+
+        e.enable_auto_save(True)
+        e.remove_policy('alice', 'data1', 'write')
+        e.load_policy()
+        self.assertListEqual(e.get_policy(), [])
+
+    def test_remove_filtered_policy(self):
+        e = get_enforcer()
+
+        e.remove_filtered_policy(0, 'data2_admin')
+        e.load_policy()
+        self.assertListEqual(e.get_policy(), [['alice', 'data1', 'read'], ['bob', 'data2', 'write']])
+
+
     def test_str(self):
         rule = CasbinRule(ptype='p', v0='alice', v1='data1', v2='read')
         self.assertEqual(str(rule), 'p, alice, data1, read')
@@ -92,13 +124,5 @@ class TestConfig(TestCase):
     def test_repr(self):
         rule = CasbinRule(ptype='p', v0='alice', v1='data1', v2='read')
         self.assertEqual(repr(rule), '<CasbinRule None: "p, alice, data1, read">')
-        engine = create_engine("sqlite://")
-
-        session = sessionmaker(bind=engine)
-        Base.metadata.create_all(engine)
-        s = session()
-
-        s.add(rule)
-        s.commit()
+        rule.save()
         self.assertRegex(repr(rule), r'<CasbinRule \d+: "p, alice, data1, read">')
-        s.close()
