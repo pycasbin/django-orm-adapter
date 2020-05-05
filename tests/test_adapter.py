@@ -4,8 +4,8 @@ import simpleeval
 from unittest import TestCase
 
 from django.test import TestCase
-from ..models import CasbinRule
-from ..adapter import Adapter
+from casbin_adapter.models import CasbinRule
+from casbin_adapter.adapter import Adapter
 
 
 def get_fixture(path):
