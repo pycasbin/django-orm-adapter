@@ -52,22 +52,22 @@ class Adapter(persist.Adapter):
 
     def remove_policy(self, sec, ptype, rule):
         """removes a policy rule from the storage."""
-        queryParams = {'ptype': ptype}
+        query_params = {'ptype': ptype}
         for i, v in enumerate(rule):
-            queryParams[f'v{i}'] = v
-        rows_deleted, _ = CasbinRule.objects.filter(**queryParams).delete()
+            query_params['v{}'.format(i)] = v
+        rows_deleted, _ = CasbinRule.objects.filter(**query_params).delete()
         return True if rows_deleted > 0 else False
 
     def remove_filtered_policy(self, sec, ptype, field_index, *field_values):
         """removes policy rules that match the filter from the storage.
         This is part of the Auto-Save feature.
         """
-        queryParams = {'ptype': ptype}
+        query_params = {'ptype': ptype}
         if not(0 <= field_index <= 5):
             return False
         if not (1 <= field_index + len(field_values) <= 6):
             return False
         for i, v in enumerate(field_values):
-            queryParams[f'v{i + field_index}'] = v
-        rows_deleted, _ = CasbinRule.objects.filter(**queryParams).delete()
+            query_params['v{}'.format(i + field_index)] = v
+        rows_deleted, _ = CasbinRule.objects.filter(**query_params).delete()
         return True if rows_deleted > 0 else False
