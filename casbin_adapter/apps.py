@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.db import connection
-from django.db.utils import OperationalError
+from django.db.utils import OperationalError, ProgrammingError
 
 
 class CasbinAdapterConfig(AppConfig):
@@ -19,6 +19,6 @@ class CasbinAdapterConfig(AppConfig):
                 if row:
                     from .enforcer import enforcer
                     enforcer._load()
-        except OperationalError:
+        except (OperationalError, ProgrammingError):
             pass
 
