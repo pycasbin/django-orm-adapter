@@ -1,6 +1,57 @@
-from casbin import persist
+from casbin import persist, Enforcer as BaseEnforcer
 
 from .models import CasbinRule
+
+_enforcer = None
+_ready = False
+
+def _mark_ready():
+    global _ready
+    _ready = True
+
+def register(enforcer):
+    _enforcer = enforcer
+
+class Enforcer(BaseEnforcer):
+    _loaded = False
+    _calls = list()
+
+    def __init__(self, *args, **kwargs):
+        global _ready
+        if _ready == True:
+            self._init_enforcer()
+        else:
+            attr = super().__init__
+            self._record_call(attr, *args, **kwargs)
+
+        global _enforcer
+        _enforcer = self
+
+
+    def _init_enforcer(self):
+        self._loaded = True
+        for call in self._calls:
+            attr, args, kwargs = call
+            attr(*args, **kwargs)
+
+    def _record_call(self, attr, *args, **kwargs):
+        self._calls.append([attr, args, kwargs])
+
+    def __getattribute__(self, name):
+        if _ready:
+            return super().__getattribute__(name)
+
+        attr = super().__getattribute__(name)
+        if name in ['__init__', '_init_enforcer', '_record_call', '_calls', '_loaded']:
+            return attr
+        else:
+            if hasattr(attr, '__call__'):
+                def proxy(*args, **kwargs):
+                    self._record_call(attr, *args, **kwargs)
+                return proxy
+            else:
+                return attr
+
 
 
 class Adapter(persist.Adapter):
