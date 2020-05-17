@@ -10,15 +10,15 @@ class CasbinAdapterConfig(AppConfig):
         try:
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT app, name applied FROM django_migrations WHERE app = 'casbin_adapter' AND name = '0001_initial';")
+                    """
+                    SELECT app, name applied FROM django_migrations
+                    WHERE app = 'casbin_adapter' AND name = '0001_initial';
+                    """
+                )
                 row = cursor.fetchone()
                 if row:
-                    from .adapter import _mark_ready, _enforcer as enforcer
-
-                    _mark_ready()
-                    if enforcer:
-                        print('delayed enforcer init')
-                        enforcer._init_enforcer()
+                    from .enforcer import enforcer
+                    enforcer._load()
         except OperationalError:
             pass
 

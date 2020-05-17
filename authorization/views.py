@@ -1,10 +1,4 @@
 from django.shortcuts import render
 
-from casbin_adapter.adapter import Enforcer
-
-print('views init')
-e = Enforcer()
-
-print('views.py enforcer', e, id(e))
-
+from casbin_adapter.enforcer import enforcer
 # Create your views here.
