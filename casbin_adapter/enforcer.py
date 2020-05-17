@@ -1,5 +1,9 @@
 from django.conf import settings
+from django.db import connection
+from django.db.utils import OperationalError, ProgrammingError
+
 from casbin import Enforcer
+
 from .adapter import Adapter
 
 
@@ -30,13 +34,31 @@ class ProxyEnforcer(Enforcer):
     def __getattribute__(self, name):
         safe_methods = ['__init__', '_load', '_initialized']
         if not super().__getattribute__('_initialized') and name not in safe_methods:
-            raise Exception((
-                "Calling enforcer attributes before django registry is ready. "
-                "Prevent making any calls to the enforcer on import/startup"
-            ))
+            initialize_enforcer()
+            if not super().__getattribute__('_initialized'):
+                raise Exception((
+                    "Calling enforcer attributes before django registry is ready. "
+                    "Prevent making any calls to the enforcer on import/startup"
+                ))
 
         return super().__getattribute__(name)
 
 
 enforcer = ProxyEnforcer()
+
+
+def initialize_enforcer():
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT app, name applied FROM django_migrations
+                WHERE app = 'casbin_adapter' AND name = '0001_initial';
+                """
+            )
+            row = cursor.fetchone()
+            if row:
+                enforcer._load()
+    except (OperationalError, ProgrammingError):
+        pass
 
