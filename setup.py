@@ -8,6 +8,8 @@ with open(desc_file, "r") as fh:
 setuptools.setup(
     name="django-orm-adapter",
     version="0.0.1",
+    author="TechLee",
+    author_email="techlee@qq.com",
     description="Django ORM Adapter is the Django's ORM adapter for PyCasbin. With this library, Casbin can load policy from Django ORM supported database or save policy to it.",
     long_description=long_description,
     long_description_content_type="text/markdown",
