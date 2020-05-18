@@ -24,9 +24,6 @@ Based on [Officially Supported Databases](https://docs.djangoproject.com/en/3.0/
 
 ## Installation
 
-> ```
-> pip install casbin_django_orm_adapter
-> ```
 ```
 pip install casbin-django-orm-adapter
 ```
