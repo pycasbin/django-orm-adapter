@@ -2,11 +2,11 @@
 
 [![Build Status](https://www.travis-ci.org/pycasbin/django-orm-adapter.svg?branch=master)](https://www.travis-ci.org/pycasbin/django-orm-adapter)
 [![Coverage Status](https://coveralls.io/repos/github/pycasbin/django-orm-adapter/badge.svg)](https://coveralls.io/github/pycasbin/django-orm-adapter)
-[![Version](https://img.shields.io/pypi/v/casbin_django_orm_adapter.svg)](https://pypi.org/project/casbin_django_orm_adapter/)
-[![PyPI - Wheel](https://img.shields.io/pypi/wheel/casbin_django_orm_adapter.svg)](https://pypi.org/project/casbin_django_orm_adapter/)
-[![Pyversions](https://img.shields.io/pypi/pyversions/casbin_django_orm_adapter.svg)](https://pypi.org/project/casbin_django_orm_adapter/)
-[![Download](https://img.shields.io/pypi/dm/casbin_django_orm_adapter.svg)](https://pypi.org/project/casbin_django_orm_adapter/)
-[![License](https://img.shields.io/pypi/l/casbin_django_orm_adapter.svg)](https://pypi.org/project/casbin_django_orm_adapter/)
+[![Version](https://img.shields.io/pypi/v/casbin-django-orm-adapter.svg)](https://pypi.org/project/casbin-django-orm-adapter/)
+[![PyPI - Wheel](https://img.shields.io/pypi/wheel/casbin-django-orm-adapter.svg)](https://pypi.org/project/casbin-django-orm-adapter/)
+[![Pyversions](https://img.shields.io/pypi/pyversions/casbin-django-orm-adapter.svg)](https://pypi.org/project/casbin-django-orm-adapter/)
+[![Download](https://img.shields.io/pypi/dm/casbin-django-orm-adapter.svg)](https://pypi.org/project/casbin-django-orm-adapter/)
+[![License](https://img.shields.io/pypi/l/casbin-django-orm-adapter.svg)](https://pypi.org/project/casbin-django-orm-adapter/)
 
 Django ORM Adapter is the [Django](https://www.djangoproject.com/)'s [ORM](https://docs.djangoproject.com/en/3.0/ref/databases/) adapter for [PyCasbin](https://github.com/pycasbin/django-orm-adapter). With this library, Casbin can load policy from Django ORM supported database or save policy to it.
 
@@ -28,7 +28,7 @@ Based on [Officially Supported Databases](https://docs.djangoproject.com/en/3.0/
 > pip install casbin_django_orm_adapter
 > ```
 ```
-pip install git+https://github.com/pycasbin/django-orm-adapter
+pip install casbin-django-orm-adapter
 ```
 
 Add `casbin_adapter.apps.CasbinAdapterConfig` to your `INSTALLED_APPS`
