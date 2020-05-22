@@ -5,6 +5,8 @@ from django.db.utils import OperationalError, ProgrammingError
 from casbin import Enforcer
 
 from .adapter import Adapter
+from .utils import import_class
+
 
 
 class ProxyEnforcer(Enforcer):
@@ -19,7 +21,10 @@ class ProxyEnforcer(Enforcer):
             self._initialized = True
             model = getattr(settings, 'CASBIN_MODEL')
             enable_log = getattr(settings, 'CASBIN_LOG_ENABLED', False)
-            adapter = Adapter()
+            adapter_loc = getattr(settings, 'CASBIN_ADAPTER', 'casbin_adapter.adapter.Adapter')
+            adapter_args = getattr(settings, 'CASBIN_ADAPTER_ARGS', (,))
+            Adapter = import_class(adapter_loc)
+            adapter = adapter_class(*adapter_args)
 
             super().__init__(model, adapter, enable_log)
 
