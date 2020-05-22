@@ -1,3 +1,7 @@
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 SECRET_KEY = 'not-a-production-secret'
 
 INSTALLED_APPS = [
@@ -7,7 +11,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "casbin_adapter",
+    "casbin_adapter.apps.CasbinAdapterConfig",
     "tests",
 ]
 
@@ -37,3 +41,5 @@ TEMPLATES = [
 ]
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+
+CASBIN_MODEL = os.path.join(BASE_DIR, 'tests', 'rbac_model.conf')

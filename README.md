@@ -28,38 +28,40 @@ Based on [Officially Supported Databases](https://docs.djangoproject.com/en/3.0/
 pip install casbin-django-orm-adapter
 ```
 
-Add `casbin_adapter` to your `INSTALLED_APPS`
+Add `casbin_adapter.apps.CasbinAdapterConfig` to your `INSTALLED_APPS`
 
 ```python
+# settings.py
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 INSTALLED_APPS = [
     ...
-    'casbin_adapter',
+    'casbin_adapter.apps.CasbinAdapterConfig',
     ...
 ]
+
+CASBIN_MODEL = os.path.join(BASE_DIR, 'casbin.conf')
 ```
 
-To run schema migration, execute `python manage.py migrate casbin_adapter
+To run schema migration, execute `python manage.py migrate casbin_adapter`
 
 ## Simple Example
 
 ```python
-import casbin
-from casbin_adapter.adapter import Adapter
+# views.py
+from casbin_adapter.enforcer import enforcer
 
-adapter = Adapter()
+def hello(request):
+    sub = "alice"  # the user that wants to access a resource.
+    obj = "data1"  # the resource that is going to be accessed.
+    act = "read"  # the operation that the user performs on the resource.
 
-e = casbin.Enforcer('path/to/model.conf', adapter, True)
-
-sub = "alice"  # the user that wants to access a resource.
-obj = "data1"  # the resource that is going to be accessed.
-act = "read"  # the operation that the user performs on the resource.
-
-if e.enforce(sub, obj, act):
-    # permit alice to read data1casbin_django_orm_adapter
-    pass
-else:
-    # deny the request, show an error
-    pass
+    if e.enforce(sub, obj, act):
+        # permit alice to read data1casbin_django_orm_adapter
+        pass
+    else:
+        # deny the request, show an error
+        pass
 ```
 
 ### Getting Help
