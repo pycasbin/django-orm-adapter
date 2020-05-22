@@ -22,7 +22,7 @@ class ProxyEnforcer(Enforcer):
             model = getattr(settings, 'CASBIN_MODEL')
             enable_log = getattr(settings, 'CASBIN_LOG_ENABLED', False)
             adapter_loc = getattr(settings, 'CASBIN_ADAPTER', 'casbin_adapter.adapter.Adapter')
-            adapter_args = getattr(settings, 'CASBIN_ADAPTER_ARGS', (,))
+            adapter_args = getattr(settings, 'CASBIN_ADAPTER_ARGS', tuple())
             Adapter = import_class(adapter_loc)
             adapter = adapter_class(*adapter_args)
 
