@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.db import connection
 from django.db.utils import OperationalError, ProgrammingError
@@ -5,6 +6,10 @@ from django.db.utils import OperationalError, ProgrammingError
 from casbin import Enforcer
 
 from .adapter import Adapter
+from .utils import import_class
+
+logger = logging.getLogger(__name__)
+
 
 
 class ProxyEnforcer(Enforcer):
@@ -13,15 +18,22 @@ class ProxyEnforcer(Enforcer):
     def __init__(self, *args, **kwargs):
         if self._initialized:
             super().__init__(*args, **kwargs)
+        else:
+            logger.info('Deferring casbin enforcer initialisation until django is ready')
 
     def _load(self):
         if self._initialized == False:
+            logger.info('Performing deferred casbin enforcer initialisation')
             self._initialized = True
             model = getattr(settings, 'CASBIN_MODEL')
             enable_log = getattr(settings, 'CASBIN_LOG_ENABLED', False)
-            adapter = Adapter()
+            adapter_loc = getattr(settings, 'CASBIN_ADAPTER', 'casbin_adapter.adapter.Adapter')
+            adapter_args = getattr(settings, 'CASBIN_ADAPTER_ARGS', tuple())
+            Adapter = import_class(adapter_loc)
+            adapter = Adapter(*adapter_args)
 
             super().__init__(model, adapter, enable_log)
+            logger.debug('Casbin enforcer initialised')
 
             watcher = getattr(settings, 'CASBIN_WATCHER', None)
             if watcher:

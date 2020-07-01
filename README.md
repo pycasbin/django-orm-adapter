@@ -64,6 +64,32 @@ def hello(request):
         pass
 ```
 
+## Configuration
+
+### `CASBIN_MODEL`
+A string containing the file location of your casbin model.
+
+### `CASBIN_LOG_ENABLED`
+If `True`, enables logging. `False` by default.
+
+### `CASBIN_ADAPTER`
+A string containing the adapter import path. Defaults to the django adapter shipped with this package: `casbin_adapter.adapter.Adapter`
+
+### `CASBIN_ADAPTER_ARGS`
+A tuple of arguments to be passed into the constructor of the adapter specified
+in `CASBIN_ADAPTER`. Refer to adapters to see available arguments. 
+
+E.g. if you wish to use the file adapter 
+set the adapter to `casbin.persist.adapters.FileAdapter` and use
+`CASBIN_ADAPTER_ARGS = ('path/to/policy_file.csv',)`
+
+### `CASBIN_WATCHER`
+Watcher instance to be set as the watcher on the enforcer instance.
+
+### `CASBIN_ROLE_MANAGER`
+Role manager instance to be set as the role manager on the enforcer instance.
+
+
 ### Getting Help
 
 - [PyCasbin](https://github.com/casbin/pycasbin)
