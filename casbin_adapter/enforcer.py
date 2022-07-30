@@ -11,7 +11,6 @@ from .utils import import_class
 logger = logging.getLogger(__name__)
 
 
-
 class ProxyEnforcer(Enforcer):
     _initialized = False
 
@@ -19,39 +18,41 @@ class ProxyEnforcer(Enforcer):
         if self._initialized:
             super().__init__(*args, **kwargs)
         else:
-            logger.info('Deferring casbin enforcer initialisation until django is ready')
+            logger.info("Deferring casbin enforcer initialisation until django is ready")
 
     def _load(self):
         if self._initialized == False:
-            logger.info('Performing deferred casbin enforcer initialisation')
+            logger.info("Performing deferred casbin enforcer initialisation")
             self._initialized = True
-            model = getattr(settings, 'CASBIN_MODEL')
-            enable_log = getattr(settings, 'CASBIN_LOG_ENABLED', False)
-            adapter_loc = getattr(settings, 'CASBIN_ADAPTER', 'casbin_adapter.adapter.Adapter')
-            adapter_args = getattr(settings, 'CASBIN_ADAPTER_ARGS', tuple())
+            model = getattr(settings, "CASBIN_MODEL")
+            enable_log = getattr(settings, "CASBIN_LOG_ENABLED", False)
+            adapter_loc = getattr(settings, "CASBIN_ADAPTER", "casbin_adapter.adapter.Adapter")
+            adapter_args = getattr(settings, "CASBIN_ADAPTER_ARGS", tuple())
             Adapter = import_class(adapter_loc)
             adapter = Adapter(*adapter_args)
 
             super().__init__(model, adapter, enable_log)
-            logger.debug('Casbin enforcer initialised')
+            logger.debug("Casbin enforcer initialised")
 
-            watcher = getattr(settings, 'CASBIN_WATCHER', None)
+            watcher = getattr(settings, "CASBIN_WATCHER", None)
             if watcher:
                 self.set_watcher(watcher)
 
-            role_manager = getattr(settings, 'CASBIN_ROLE_MANAGER', None)
+            role_manager = getattr(settings, "CASBIN_ROLE_MANAGER", None)
             if role_manager:
                 self.set_role_manager(role_manager)
 
     def __getattribute__(self, name):
-        safe_methods = ['__init__', '_load', '_initialized']
-        if not super().__getattribute__('_initialized') and name not in safe_methods:
+        safe_methods = ["__init__", "_load", "_initialized"]
+        if not super().__getattribute__("_initialized") and name not in safe_methods:
             initialize_enforcer()
-            if not super().__getattribute__('_initialized'):
-                raise Exception((
-                    "Calling enforcer attributes before django registry is ready. "
-                    "Prevent making any calls to the enforcer on import/startup"
-                ))
+            if not super().__getattribute__("_initialized"):
+                raise Exception(
+                    (
+                        "Calling enforcer attributes before django registry is ready. "
+                        "Prevent making any calls to the enforcer on import/startup"
+                    )
+                )
 
         return super().__getattribute__(name)
 
@@ -73,4 +74,3 @@ def initialize_enforcer():
                 enforcer._load()
     except (OperationalError, ProgrammingError):
         pass
-
