@@ -4,9 +4,9 @@ from django.db.utils import OperationalError, ProgrammingError
 
 
 class CasbinAdapterConfig(AppConfig):
-    name = 'casbin_adapter'
+    name = "casbin_adapter"
 
     def ready(self):
         from .enforcer import initialize_enforcer
-        initialize_enforcer()
 
+        initialize_enforcer()

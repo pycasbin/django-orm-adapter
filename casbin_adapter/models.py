@@ -13,23 +13,23 @@ class CasbinRule(models.Model):
     v5 = models.CharField(max_length=255)
 
     class Meta:
-        db_table = 'casbin_rule'
+        db_table = "casbin_rule"
 
     def __str__(self):
         text = self.ptype
 
         if self.v0:
-            text = text + ', ' + self.v0
+            text = text + ", " + self.v0
         if self.v1:
-            text = text + ', ' + self.v1
+            text = text + ", " + self.v1
         if self.v2:
-            text = text + ', ' + self.v2
+            text = text + ", " + self.v2
         if self.v3:
-            text = text + ', ' + self.v3
+            text = text + ", " + self.v3
         if self.v4:
-            text = text + ', ' + self.v4
+            text = text + ", " + self.v4
         if self.v5:
-            text = text + ', ' + self.v5
+            text = text + ", " + self.v5
         return text
 
     def __repr__(self):

@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'not-a-production-secret'
+SECRET_KEY = "not-a-production-secret"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,4 +42,4 @@ TEMPLATES = [
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
-CASBIN_MODEL = os.path.join(BASE_DIR, 'tests', 'rbac_model.conf')
+CASBIN_MODEL = os.path.join(BASE_DIR, "tests", "rbac_model.conf")
