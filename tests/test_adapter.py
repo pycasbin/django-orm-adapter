@@ -23,7 +23,7 @@ def get_enforcer():
         CasbinRule(ptype='g', v0='alice', v1='data2_admin'),
     ])
 
-    return casbin.Enforcer(get_fixture('rbac_model.conf'), adapter, True)
+    return casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
 
 
 class TestConfig(TestCase):
@@ -37,7 +37,7 @@ class TestConfig(TestCase):
 
     def test_add_policy(self):
         adapter = Adapter()
-        e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter, True)
+        e = casbin.Enforcer(get_fixture('rbac_model.conf'), adapter)
 
         try:
             self.assertFalse(e.enforce('alice', 'data1', 'read'))
