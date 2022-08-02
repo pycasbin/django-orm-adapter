@@ -31,7 +31,7 @@ class ProxyEnforcer(Enforcer):
             Adapter = import_class(adapter_loc)
             adapter = Adapter(*adapter_args)
 
-            super().__init__(model, adapter, enable_log)
+            super().__init__(model, adapter)
             logger.debug("Casbin enforcer initialised")
 
             watcher = getattr(settings, "CASBIN_WATCHER", None)
