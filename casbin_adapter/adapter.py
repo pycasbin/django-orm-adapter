@@ -1,7 +1,11 @@
-from django.conf import settings
+import logging
+
 from casbin import persist
+from django.db.utils import OperationalError, ProgrammingError
 
 from .models import CasbinRule
+
+logger = logging.getLogger(__name__)
 
 
 class Adapter(persist.Adapter):
@@ -9,10 +13,13 @@ class Adapter(persist.Adapter):
 
     def load_policy(self, model):
         """loads all policy rules from the storage."""
-        lines = CasbinRule.objects.all()
+        try:
+            lines = CasbinRule.objects.all()
 
-        for line in lines:
-            persist.load_policy_line(str(line), model)
+            for line in lines:
+                persist.load_policy_line(str(line), model)
+        except (OperationalError, ProgrammingError) as error:
+            logger.warning("Could not load policy from database: {}".format(error))
 
     def _create_policy_line(self, ptype, rule):
         line = CasbinRule(ptype=ptype)
