@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.0.2](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.1...v1.0.2) (2022-08-15)
+
+
+### Bug Fixes
+
+* add error handler when initial django app ([356a0f3](https://github.com/pycasbin/django-orm-adapter/commit/356a0f3a42a5399488cc83eba9b3d0f1cec70e8f))
+
 ## [1.0.1](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.0...v1.0.1) (2022-08-02)
 
 
