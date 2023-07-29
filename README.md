@@ -69,9 +69,6 @@ def hello(request):
 ### `CASBIN_MODEL`
 A string containing the file location of your casbin model.
 
-### `CASBIN_LOG_ENABLED`
-If `True`, enables logging. `False` by default.
-
 ### `CASBIN_ADAPTER`
 A string containing the adapter import path. Defaults to the django adapter shipped with this package: `casbin_adapter.adapter.Adapter`
 
