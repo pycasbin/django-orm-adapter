@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.0.3](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.2...v1.0.3) (2023-07-29)
+
+
+### Bug Fixes
+
+* remove unused argument enable_log ([#20](https://github.com/pycasbin/django-orm-adapter/issues/20)) ([aa3e0a3](https://github.com/pycasbin/django-orm-adapter/commit/aa3e0a38132a212f6cbf4908cd2978b405a5964c))
+
 ## [1.0.2](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.1...v1.0.2) (2022-08-15)
 
 
