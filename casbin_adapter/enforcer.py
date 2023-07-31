@@ -5,7 +5,6 @@ from django.db.utils import OperationalError, ProgrammingError
 
 from casbin import Enforcer
 
-from .adapter import Adapter
 from .utils import import_class
 
 logger = logging.getLogger(__name__)
@@ -13,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class ProxyEnforcer(Enforcer):
     _initialized = False
+    db_alias = "default"
 
     def __init__(self, *args, **kwargs):
         if self._initialized:
@@ -27,8 +27,9 @@ class ProxyEnforcer(Enforcer):
             model = getattr(settings, "CASBIN_MODEL")
             adapter_loc = getattr(settings, "CASBIN_ADAPTER", "casbin_adapter.adapter.Adapter")
             adapter_args = getattr(settings, "CASBIN_ADAPTER_ARGS", tuple())
+            self.db_alias = getattr(settings, "CASBIN_DB_alias", "default")
             Adapter = import_class(adapter_loc)
-            adapter = Adapter(*adapter_args)
+            adapter = Adapter(self.db_alias, *adapter_args)
 
             super().__init__(model, adapter)
             logger.debug("Casbin enforcer initialised")
@@ -44,7 +45,7 @@ class ProxyEnforcer(Enforcer):
     def __getattribute__(self, name):
         safe_methods = ["__init__", "_load", "_initialized"]
         if not super().__getattribute__("_initialized") and name not in safe_methods:
-            initialize_enforcer()
+            initialize_enforcer(self.db_alias)
             if not super().__getattribute__("_initialized"):
                 raise Exception(
                     (
@@ -59,17 +60,29 @@ class ProxyEnforcer(Enforcer):
 enforcer = ProxyEnforcer()
 
 
-def initialize_enforcer():
+def initialize_enforcer(db_alias=None):
     try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                SELECT app, name applied FROM django_migrations
-                WHERE app = 'casbin_adapter' AND name = '0001_initial';
-                """
-            )
-            row = cursor.fetchone()
-            if row:
-                enforcer._load()
+        row = None
+        if db_alias:
+            with connection[db_alias].cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT app, name applied FROM django_migrations
+                    WHERE app = 'casbin_adapter' AND name = '0001_initial';
+                    """
+                )
+                row = cursor.fetchone()
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT app, name applied FROM django_migrations
+                    WHERE app = 'casbin_adapter' AND name = '0001_initial';
+                    """
+                )
+                row = cursor.fetchone()
+
+        if row:
+            enforcer._load()
     except (OperationalError, ProgrammingError):
         pass
