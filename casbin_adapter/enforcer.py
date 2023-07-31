@@ -27,7 +27,7 @@ class ProxyEnforcer(Enforcer):
             model = getattr(settings, "CASBIN_MODEL")
             adapter_loc = getattr(settings, "CASBIN_ADAPTER", "casbin_adapter.adapter.Adapter")
             adapter_args = getattr(settings, "CASBIN_ADAPTER_ARGS", tuple())
-            self.db_alias = getattr(settings, "CASBIN_DB_alias", "default")
+            self.db_alias = getattr(settings, "CASBIN_DB_ALIAS", "default")
             Adapter = import_class(adapter_loc)
             adapter = Adapter(self.db_alias, *adapter_args)
 
