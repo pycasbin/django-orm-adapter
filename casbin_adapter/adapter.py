@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class Adapter(persist.Adapter):
     """the interface for Casbin adapters."""
 
-    def __init__(self, db_alias):
+    def __init__(self, db_alias="default"):
         self.db_alias = db_alias
 
     def load_policy(self, model):
