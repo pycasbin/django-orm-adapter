@@ -11,10 +11,13 @@ logger = logging.getLogger(__name__)
 class Adapter(persist.Adapter):
     """the interface for Casbin adapters."""
 
+    def __init__(self, db_alias="default"):
+        self.db_alias = db_alias
+
     def load_policy(self, model):
         """loads all policy rules from the storage."""
         try:
-            lines = CasbinRule.objects.all()
+            lines = CasbinRule.objects.using(self.db_alias).all()
 
             for line in lines:
                 persist.load_policy_line(str(line), model)
@@ -41,7 +44,7 @@ class Adapter(persist.Adapter):
         """saves all policy rules to the storage."""
         # See https://casbin.org/docs/en/adapters#autosave
         # for why this is deleting all rules
-        CasbinRule.objects.all().delete()
+        CasbinRule.objects.using(self.db_alias).all().delete()
 
         lines = []
         for sec in ["p", "g"]:
@@ -50,7 +53,7 @@ class Adapter(persist.Adapter):
             for ptype, ast in model.model[sec].items():
                 for rule in ast.policy:
                     lines.append(self._create_policy_line(ptype, rule))
-        CasbinRule.objects.bulk_create(lines)
+        CasbinRule.objects.using(self.db_alias).bulk_create(lines)
         return True
 
     def add_policy(self, sec, ptype, rule):
@@ -63,7 +66,7 @@ class Adapter(persist.Adapter):
         query_params = {"ptype": ptype}
         for i, v in enumerate(rule):
             query_params["v{}".format(i)] = v
-        rows_deleted, _ = CasbinRule.objects.filter(**query_params).delete()
+        rows_deleted, _ = CasbinRule.objects.using(self.db_alias).filter(**query_params).delete()
         return True if rows_deleted > 0 else False
 
     def remove_filtered_policy(self, sec, ptype, field_index, *field_values):
@@ -77,5 +80,5 @@ class Adapter(persist.Adapter):
             return False
         for i, v in enumerate(field_values):
             query_params["v{}".format(i + field_index)] = v
-        rows_deleted, _ = CasbinRule.objects.filter(**query_params).delete()
+        rows_deleted, _ = CasbinRule.objects.using(self.db_alias).filter(**query_params).delete()
         return True if rows_deleted > 0 else False

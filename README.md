@@ -70,7 +70,7 @@ def hello(request):
 A string containing the file location of your casbin model.
 
 ### `CASBIN_ADAPTER`
-A string containing the adapter import path. Defaults to the django adapter shipped with this package: `casbin_adapter.adapter.Adapter`
+A string containing the adapter import path. Default to the django adapter shipped with this package: `casbin_adapter.adapter.Adapter`
 
 ### `CASBIN_ADAPTER_ARGS`
 A tuple of arguments to be passed into the constructor of the adapter specified
@@ -79,6 +79,9 @@ in `CASBIN_ADAPTER`. Refer to adapters to see available arguments.
 E.g. if you wish to use the file adapter 
 set the adapter to `casbin.persist.adapters.FileAdapter` and use
 `CASBIN_ADAPTER_ARGS = ('path/to/policy_file.csv',)`
+
+### `CASBIN_DB_ALIAS`
+The database the adapter uses. Default to "default".
 
 ### `CASBIN_WATCHER`
 Watcher instance to be set as the watcher on the enforcer instance.

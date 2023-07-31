@@ -1,7 +1,6 @@
 import os
 import casbin
 import simpleeval
-from unittest import TestCase
 
 from django.test import TestCase
 from casbin_adapter.models import CasbinRule
