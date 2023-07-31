@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.1.0](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.3...v1.1.0) (2023-07-31)
+
+
+### Features
+
+* add db alias ([#21](https://github.com/pycasbin/django-orm-adapter/issues/21)) ([a6d61da](https://github.com/pycasbin/django-orm-adapter/commit/a6d61da8943ab839e4452478abb15a25d68067a5))
+
 ## [1.0.3](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.2...v1.0.3) (2023-07-29)
 
 
