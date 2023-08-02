@@ -1,6 +1,6 @@
 import logging
 from django.conf import settings
-from django.db import connection
+from django.db import connection, connections
 from django.db.utils import OperationalError, ProgrammingError
 
 from casbin import Enforcer
@@ -64,7 +64,7 @@ def initialize_enforcer(db_alias=None):
     try:
         row = None
         if db_alias:
-            with connection[db_alias].cursor() as cursor:
+            with connections[db_alias].cursor() as cursor:
                 cursor.execute(
                     """
                     SELECT app, name applied FROM django_migrations
