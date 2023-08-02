@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.1](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.0...v1.1.1) (2023-08-02)
+
+
+### Bug Fixes
+
+* initialize with db_alias ([#24](https://github.com/pycasbin/django-orm-adapter/issues/24)) ([e3f283f](https://github.com/pycasbin/django-orm-adapter/commit/e3f283fd6e07efef037ab552f81bb9061a4fc563))
+
 # [1.1.0](https://github.com/pycasbin/django-orm-adapter/compare/v1.0.3...v1.1.0) (2023-07-31)
 
 
