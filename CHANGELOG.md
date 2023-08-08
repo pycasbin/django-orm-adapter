@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.2](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.1...v1.1.2) (2023-08-08)
+
+
+### Bug Fixes
+
+* fix broken links ([#25](https://github.com/pycasbin/django-orm-adapter/issues/25)) ([483325f](https://github.com/pycasbin/django-orm-adapter/commit/483325f885c59dd54548d097c7a592b0cde8f569))
+
 ## [1.1.1](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.0...v1.1.1) (2023-08-02)
 
 
