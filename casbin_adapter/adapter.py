@@ -42,7 +42,7 @@ class Adapter(persist.Adapter):
 
     def save_policy(self, model):
         """saves all policy rules to the storage."""
-        # See https://casbin.org/docs/en/adapters#autosave
+        # See https://casbin.org/docs/adapters/#autosave
         # for why this is deleting all rules
         CasbinRule.objects.using(self.db_alias).all().delete()
 
