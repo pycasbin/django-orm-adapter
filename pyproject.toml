@@ -1,2 +1,46 @@
+[project]
+name = "casbin-django-orm-adapter"
+version = "1.1.2"
+authors = [
+    {name = "Yang Luo", email = "hsluoyz@qq.com"},
+]
+description = "Django's ORM adapter for PyCasbin"
+readme = "README.md"
+keywords = [
+    "casbin",
+    "adapter",
+    "storage-driver",
+    "django",
+    "orm",
+    "django-orm",
+    "access-control",
+    "authorization"
+]
+dynamic = ["dependencies"]
+requires-python = ">=3.7"
+license = {text = "Apache 2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Home-page = "https://github.com/pycasbin/django-orm-adapter"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+exclude = ["tests"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
 [tool.black]
 line-length = 120
