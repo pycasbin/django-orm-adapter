@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.3](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.2...v1.1.3) (2023-10-28)
+
+
+### Bug Fixes
+
+* migrate setup.py to pyproject.toml ([#27](https://github.com/pycasbin/django-orm-adapter/issues/27)) ([1c69f62](https://github.com/pycasbin/django-orm-adapter/commit/1c69f6220975e7a3996947cab6b0c3048ca8ed9a))
+
 ## [1.1.2](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.1...v1.1.2) (2023-08-08)
 
 
