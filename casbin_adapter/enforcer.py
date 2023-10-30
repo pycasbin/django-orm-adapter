@@ -21,7 +21,7 @@ class ProxyEnforcer(Enforcer):
             logger.info("Deferring casbin enforcer initialisation until django is ready")
 
     def _load(self):
-        if self._initialized == False:
+        if self._initialized is False:
             logger.info("Performing deferred casbin enforcer initialisation")
             self._initialized = True
             model = getattr(settings, "CASBIN_MODEL")
@@ -63,24 +63,15 @@ enforcer = ProxyEnforcer()
 def initialize_enforcer(db_alias=None):
     try:
         row = None
-        if db_alias:
-            with connections[db_alias].cursor() as cursor:
-                cursor.execute(
-                    """
-                    SELECT app, name applied FROM django_migrations
-                    WHERE app = 'casbin_adapter' AND name = '0001_initial';
-                    """
-                )
-                row = cursor.fetchone()
-        else:
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    SELECT app, name applied FROM django_migrations
-                    WHERE app = 'casbin_adapter' AND name = '0001_initial';
-                    """
-                )
-                row = cursor.fetchone()
+        connect = connections[db_alias] if db_alias else connection
+        with connect.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT app, name applied FROM django_migrations
+                WHERE app = 'casbin_adapter' AND name = '0001_initial';
+                """
+            )
+            row = cursor.fetchone()
 
         if row:
             enforcer._load()
