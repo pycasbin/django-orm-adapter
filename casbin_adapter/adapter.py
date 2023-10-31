@@ -54,7 +54,7 @@ class Adapter(persist.Adapter):
                 for rule in ast.policy:
                     lines.append(self._create_policy_line(ptype, rule))
         rows_created = CasbinRule.objects.using(self.db_alias).bulk_create(lines)
-        return rows_created > 0
+        return len(rows_created) > 0
 
     def add_policy(self, sec, ptype, rule):
         """adds a policy rule to the storage."""
