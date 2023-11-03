@@ -53,8 +53,8 @@ class Adapter(persist.Adapter):
             for ptype, ast in model.model[sec].items():
                 for rule in ast.policy:
                     lines.append(self._create_policy_line(ptype, rule))
-        CasbinRule.objects.using(self.db_alias).bulk_create(lines)
-        return True
+        rows_created = CasbinRule.objects.using(self.db_alias).bulk_create(lines)
+        return len(rows_created) > 0
 
     def add_policy(self, sec, ptype, rule):
         """adds a policy rule to the storage."""
@@ -67,7 +67,7 @@ class Adapter(persist.Adapter):
         for i, v in enumerate(rule):
             query_params["v{}".format(i)] = v
         rows_deleted, _ = CasbinRule.objects.using(self.db_alias).filter(**query_params).delete()
-        return True if rows_deleted > 0 else False
+        return rows_deleted > 0
 
     def remove_filtered_policy(self, sec, ptype, field_index, *field_values):
         """removes policy rules that match the filter from the storage.
@@ -81,4 +81,4 @@ class Adapter(persist.Adapter):
         for i, v in enumerate(field_values):
             query_params["v{}".format(i + field_index)] = v
         rows_deleted, _ = CasbinRule.objects.using(self.db_alias).filter(**query_params).delete()
-        return True if rows_deleted > 0 else False
+        return rows_deleted > 0
