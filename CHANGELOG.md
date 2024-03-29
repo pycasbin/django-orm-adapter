@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.3.0](https://github.com/pycasbin/django-orm-adapter/compare/v1.2.0...v1.3.0) (2024-03-29)
+
+
+### Features
+
+* upgrade CI Node.js version to 20 ([4beb0ba](https://github.com/pycasbin/django-orm-adapter/commit/4beb0baf43e55a3ba2fdb6c30b7110135d66f8ab))
+
 # [1.2.0](https://github.com/pycasbin/django-orm-adapter/compare/v1.1.3...v1.2.0) (2023-11-03)
 
 
