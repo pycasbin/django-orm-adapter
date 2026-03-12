@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class ProxyEnforcer(Enforcer):
     _initialized = False
-    db_alias = "default"
+    db_alias = getattr(settings, "CASBIN_DB_ALIAS", "default")
 
     def __init__(self, *args, **kwargs):
         if self._initialized:
@@ -43,9 +43,9 @@ class ProxyEnforcer(Enforcer):
                 self.set_role_manager(role_manager)
 
     def __getattribute__(self, name):
-        safe_methods = ["__init__", "_load", "_initialized"]
+        safe_methods = ["__init__", "_load", "_initialized", "__class__"]
         if not super().__getattribute__("_initialized") and name not in safe_methods:
-            initialize_enforcer(self.db_alias)
+            initialize_enforcer(super().__getattribute__("db_alias"))
             if not super().__getattribute__("_initialized"):
                 raise Exception(
                     (

@@ -28,7 +28,7 @@ Based on [Officially Supported Databases](https://docs.djangoproject.com/en/3.0/
 pip install casbin-django-orm-adapter
 ```
 
-Add `casbin_adapter.apps.CasbinAdapterConfig` to your `INSTALLED_APPS`
+Add `casbin_adapter` to your `INSTALLED_APPS`
 
 ```python
 # settings.py
@@ -36,7 +36,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 INSTALLED_APPS = [
     ...
-    'casbin_adapter.apps.CasbinAdapterConfig',
+    'casbin_adapter',
     ...
 ]
 
